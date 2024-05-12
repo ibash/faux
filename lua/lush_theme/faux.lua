@@ -43,7 +43,33 @@
 --  `:lua require('lush').ify()`
 
 local lush = require('lush')
-local hsl = lush.hsl
+--local hsl = lush.hsl
+local hsluv = lush.hsluv
+
+local bg  = hsluv("#1C1C1C").da(35)
+--local text  = hsluv("#DADADA")
+--local fg = hsluv("#DCD7BA")
+local fg = hsluv("#DADADA")
+local fg2 = fg.da(14)
+local fg3 = fg.da(20)
+local fg4 = fg.da(24)
+
+
+--local muted = hsluv('#808080')
+local muted = bg.li(35)
+--local muted = background.li(100)
+--
+--local muted = hsluv("#ffffff")
+
+
+--local bg = hsluv("#1f1f28")
+--local fg = hsluv("#dcd7ba")
+local leaf = hsluv("#98bb6c")
+local water = hsluv("#7fb4ca")
+local rose = hsluv("#e46876").li(35)
+local wood = hsluv("#e6c384")
+local blossom = hsluv("#957fb8").li(35)
+local sky = hsluv("#7fb4ca")
 
 -- LSP/Linters mistakenly show `undefined global` errors in the spec, they may
 -- support an annotation like the following. Consult your server documentation.
@@ -64,11 +90,10 @@ local theme = lush(function(injected_functions)
     -- ColorColumn    { }, -- Columns set with 'colorcolumn'
     -- Conceal        { }, -- Placeholder characters substituted for concealed text (see 'conceallevel')
     -- Cursor         { }, -- Character under the cursor
-    -- CurSearch      { }, -- Highlighting a search pattern under the cursor (see 'hlsearch')
     -- lCursor        { }, -- Character under the cursor when |language-mapping| is used (see 'guicursor')
     -- CursorIM       { }, -- Like Cursor, but used when in IME mode |CursorIM|
-    -- CursorColumn   { }, -- Screen-column at the cursor, when 'cursorcolumn' is set.
-    -- CursorLine     { }, -- Screen-line at the cursor, when 'cursorline' is set. Low-priority if foreground (ctermfg OR guifg) is not set.
+    CursorColumn   { bg = bg.li(12) }, -- Screen-column at the cursor, when 'cursorcolumn' is set.
+    CursorLine     { CursorColumn }, -- Screen-line at the cursor, when 'cursorline' is set. Low-priority if foreground (ctermfg OR guifg) is not set.
     -- Directory      { }, -- Directory names (and other special names in listings)
     -- DiffAdd        { }, -- Diff mode: Added line |diff.txt|
     -- DiffChange     { }, -- Diff mode: Changed line |diff.txt|
@@ -82,36 +107,39 @@ local theme = lush(function(injected_functions)
     -- Folded         { }, -- Line used for closed folds
     -- FoldColumn     { }, -- 'foldcolumn'
     -- SignColumn     { }, -- Column where |signs| are displayed
-    -- IncSearch      { }, -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
     -- Substitute     { }, -- |:substitute| replacement text highlighting
-    -- LineNr         { }, -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
+    LineNr         { fg=muted }, -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
     -- LineNrAbove    { }, -- Line number for when the 'relativenumber' option is set, above the cursor line
     -- LineNrBelow    { }, -- Line number for when the 'relativenumber' option is set, below the cursor line
-    -- CursorLineNr   { }, -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
+    CursorLineNr   { fg=muted.li(40) }, -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
     -- CursorLineFold { }, -- Like FoldColumn when 'cursorline' is set for the cursor line
     -- CursorLineSign { }, -- Like SignColumn when 'cursorline' is set for the cursor line
-    -- MatchParen     { }, -- Character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
+    Search         { bg = blossom.lightness(bg.l + 24), fg = fg  }, -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
+    IncSearch      { bg = blossom.lightness(bg.l + 56), fg = bg, gui = "bold" }, -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
+    MatchParen     { Search }, -- Character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
+    CurSearch      { IncSearch }, -- Highlighting a search pattern under the cursor (see 'hlsearch')
     -- ModeMsg        { }, -- 'showmode' message (e.g., "-- INSERT -- ")
     -- MsgArea        { }, -- Area for messages and cmdline
     -- MsgSeparator   { }, -- Separator for scrolled messages, `msgsep` flag of 'display'
     -- MoreMsg        { }, -- |more-prompt|
-    -- NonText        { }, -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
-    -- Normal         { }, -- Normal text
+    NonText        { fg = bg.li(30) }, -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
+
+    Normal         { fg = fg, bg = bg }, -- Normal text
+
     -- NormalFloat    { }, -- Normal text in floating windows.
     -- FloatBorder    { }, -- Border of floating windows.
     -- FloatTitle     { }, -- Title of floating windows.
     -- NormalNC       { }, -- normal text in non-current windows
-    -- Pmenu          { }, -- Popup menu: Normal item.
-    -- PmenuSel       { }, -- Popup menu: Selected item.
+    Pmenu          { bg = bg.li(10) }, -- Popup menu: Normal item.
+    PmenuSel       { bg = bg.li(22) }, -- Popup menu: Selected item.
     -- PmenuKind      { }, -- Popup menu: Normal item "kind"
     -- PmenuKindSel   { }, -- Popup menu: Selected item "kind"
     -- PmenuExtra     { }, -- Popup menu: Normal item "extra text"
     -- PmenuExtraSel  { }, -- Popup menu: Selected item "extra text"
-    -- PmenuSbar      { }, -- Popup menu: Scrollbar.
-    -- PmenuThumb     { }, -- Popup menu: Thumb of the scrollbar.
+    PmenuSbar      { bg = bg.li(32) }, -- Popup menu: Scrollbar.
+    PmenuThumb     { bg = bg.li(50) }, -- Popup menu: Thumb of the scrollbar.
     -- Question       { }, -- |hit-enter| prompt and yes/no questions
     -- QuickFixLine   { }, -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
-    -- Search         { }, -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
     -- SpecialKey     { }, -- Unprintable characters: text displayed differently from what it really is. But not 'listchars' whitespace. |hl-Whitespace|
     -- SpellBad       { }, -- Word that is not recognized by the spellchecker. |spell| Combined with the highlighting used otherwise.
     -- SpellCap       { }, -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
@@ -126,6 +154,7 @@ local theme = lush(function(injected_functions)
     -- Visual         { }, -- Visual mode selection
     -- VisualNOS      { }, -- Visual mode selection when vim is "Not Owning the Selection".
     -- WarningMsg     { }, -- Warning messages
+    WarningMsg      { fg = wood }, -- warning messages
     -- Whitespace     { }, -- "nbsp", "space", "tab" and "trail" in 'listchars'
     -- Winseparator   { }, -- Separator between window splits. Inherts from |hl-VertSplit| by default, which it will replace eventually.
     -- WildMenu       { }, -- Current match in 'wildmenu' completion
@@ -140,19 +169,23 @@ local theme = lush(function(injected_functions)
     --
     -- Uncomment and edit if you want more specific syntax highlighting.
 
-    -- Comment        { }, -- Any comment
+    Comment        { fg = bg.li(38).de(24) }, -- Any comment
 
-    -- Constant       { }, -- (*) Any constant
+    --Constant       { fg = fg4 }, -- (*) Any constant
+    Constant       { fg = rose }, -- (*) Any constant
     -- String         { }, --   A string constant: "this is a string"
     -- Character      { }, --   A character constant: 'c', '\n'
     -- Number         { }, --   A number constant: 234, 0xff
     -- Boolean        { }, --   A boolean constant: TRUE, false
     -- Float          { }, --   A floating point constant: 2.3e10
 
-    -- Identifier     { }, -- (*) Any variable name
-    -- Function       { }, --   Function name (also: methods for classes)
+    --Identifier     { fg = fg2 }, -- (*) Any variable name
+    Identifier     { fg = fg }, -- (*) Any variable name
+    Function       { fg = fg }, --   Function name (also: methods for classes)
 
-    -- Statement      { }, -- (*) Any statement
+    -- Statement       { fg = fg, gui = "bold" }, -- (*) Any statement
+    --Statement       { fg = fg, gui = "bold" }, -- (*) Any statement
+    Statement       { fg = rose.rotate(60).li(60) }, -- (*) Any statement
     -- Conditional    { }, --   if, then, else, endif, switch, etc.
     -- Repeat         { }, --   for, do, while, etc.
     -- Label          { }, --   case, default, etc.
@@ -160,18 +193,22 @@ local theme = lush(function(injected_functions)
     -- Keyword        { }, --   any other keyword
     -- Exception      { }, --   try, catch, throw
 
-    -- PreProc        { }, -- (*) Generic Preprocessor
+    PreProc        { Statement }, -- (*) Generic Preprocessor
     -- Include        { }, --   Preprocessor #include
     -- Define         { }, --   Preprocessor #define
     -- Macro          { }, --   Same as Define
     -- PreCondit      { }, --   Preprocessor #if, #else, #endif, etc.
 
-    -- Type           { }, -- (*) int, long, char, etc.
+    -- Type           { fg= bg.li(58) }, -- (*) int, long, char, etc.
+    Type           { fg = blossom }, -- (*) int, long, char, etc.
     -- StorageClass   { }, --   static, register, volatile, etc.
     -- Structure      { }, --   struct, union, enum, etc.
     -- Typedef        { }, --   A typedef
 
+
     -- Special        { }, -- (*) Any special symbol
+    --Special         { fg = p1.fg3, gui = "bold" },
+    Special        { fg = fg, gui = "bold" }, -- (*) Any special symbol
     -- SpecialChar    { }, --   Special character in a constant
     -- Tag            { }, --   You can use CTRL-] on this
     -- Delimiter      { }, --   Character that needs attention
@@ -286,6 +323,25 @@ local theme = lush(function(injected_functions)
     -- sym"@preproc"           { }, -- PreProc
     -- sym"@debug"             { }, -- Debug
     -- sym"@tag"               { }, -- Tag
+    sym"@markup.heading"               { fg = blossom, gui = "bold" },
+    sym"@markup.heading.1.markdown"               { sym"@markup.heading" },
+    sym"@markup.heading.2.markdown"               { sym"@markup.heading" },
+    sym"@markup.heading.3.markdown"               { sym"@markup.heading" },
+    sym"@markup.heading.4.markdown"               { sym"@markup.heading" },
+    sym"@markup.heading.5.markdown"               { sym"@markup.heading" },
+    sym"@markup.heading.6.markdown"               { sym"@markup.heading" },
+
+			diffAdded                 { fg = leaf },
+			diffRemoved               { fg = rose },
+			diffChanged               { fg = water },
+			diffOldFile               { fg = rose, gui = "italic" },
+			diffNewFile               { fg = leaf, gui = "italic" },
+			diffFile                  { fg = wood, gui = "bold" },
+			diffLine                  { fg = blossom, gui = "bold" },
+			diffIndexLine             { fg = wood },
+
+			gitcommitOverflow         { WarningMsg },
+
 }
 end)
 
