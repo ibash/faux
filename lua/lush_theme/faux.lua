@@ -102,7 +102,6 @@ local theme = lush(function(injected_functions)
     -- EndOfBuffer    { }, -- Filler lines (~) after the end of the buffer. By default, this is highlighted like |hl-NonText|.
     -- TermCursor     { }, -- Cursor in a focused terminal
     -- TermCursorNC   { }, -- Cursor in an unfocused terminal
-    -- ErrorMsg       { }, -- Error messages on the command line
     -- VertSplit      { }, -- Column separating vertically split windows
     -- Folded         { }, -- Line used for closed folds
     -- FoldColumn     { }, -- 'foldcolumn'
@@ -145,19 +144,17 @@ local theme = lush(function(injected_functions)
     -- SpellCap       { }, -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
     -- SpellLocal     { }, -- Word that is recognized by the spellchecker as one that is used in another region. |spell| Combined with the highlighting used otherwise.
     -- SpellRare      { }, -- Word that is recognized by the spellchecker as one that is hardly ever used. |spell| Combined with the highlighting used otherwise.
-    -- StatusLine     { }, -- Status line of current window
-    -- StatusLineNC   { }, -- Status lines of not-current windows. Note: If this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
-    -- TabLine        { }, -- Tab pages line, not active tab page label
-    -- TabLineFill    { }, -- Tab pages line, where there are no labels
-    -- TabLineSel     { }, -- Tab pages line, active tab page label
+    StatusLine     {  bg = bg.li(12), fg = fg  }, -- Status line of current window
+    StatusLineNC   {  bg = bg.li(6), fg = fg.li(28)  }, -- Status lines of not-current windows. Note: If this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
+    TabLine        { StatusLine }, -- Tab pages line, not active tab page label
+    TabLineFill    { StatusLineNC }, -- Tab pages line, where there are no labels
+    TabLineSel     { gui = "bold" }, -- Tab pages line, active tab page label
     -- Title          { }, -- Titles for output from ":set all", ":autocmd" etc.
     -- Visual         { }, -- Visual mode selection
     -- VisualNOS      { }, -- Visual mode selection when vim is "Not Owning the Selection".
-    -- WarningMsg     { }, -- Warning messages
-    WarningMsg      { fg = wood }, -- warning messages
     -- Whitespace     { }, -- "nbsp", "space", "tab" and "trail" in 'listchars'
     -- Winseparator   { }, -- Separator between window splits. Inherts from |hl-VertSplit| by default, which it will replace eventually.
-    -- WildMenu       { }, -- Current match in 'wildmenu' completion
+    WildMenu       {  bg = blossom, fg = bg  }, -- Current match in 'wildmenu' completion
     -- WinBar         { }, -- Window bar of current window
     -- WinBarNC       { }, -- Window bar of not-current windows
 
@@ -217,7 +214,9 @@ local theme = lush(function(injected_functions)
 
     -- Underlined     { gui = "underline" }, -- Text that stands out, HTML links
     -- Ignore         { }, -- Left blank, hidden |hl-Ignore| (NOTE: May be invisible here in template)
-    -- Error          { }, -- Any erroneous construct
+    Error          { fg = rose }, -- Any erroneous construct
+    ErrorMsg       { Error }, -- Error messages on the command line
+    WarningMsg     { fg = wood }, -- warning messages
     -- Todo           { }, -- Anything that needs extra attention; mostly the keywords TODO FIXME and XXX
 
     -- These groups are for the native LSP client and diagnostic system. Some
@@ -293,7 +292,10 @@ local theme = lush(function(injected_functions)
     -- sym"@macro"             { }, -- Macro
     -- sym"@string"            { }, -- String
     -- sym"@string.escape"     { }, -- SpecialChar
-    -- sym"@string.special"    { }, -- SpecialChar
+    sym"@string.special"      { Special }, -- SpecialChar
+    sym"@string.special.url"  { sym"@string.special" },
+    sym"@string.special.path" { sym"@string.special" },
+
     -- sym"@character"         { }, -- Character
     -- sym"@character.special" { }, -- SpecialChar
     -- sym"@number"            { }, -- Number
@@ -331,16 +333,23 @@ local theme = lush(function(injected_functions)
     sym"@markup.heading.5.markdown"               { sym"@markup.heading" },
     sym"@markup.heading.6.markdown"               { sym"@markup.heading" },
 
-			diffAdded                 { fg = leaf },
-			diffRemoved               { fg = rose },
-			diffChanged               { fg = water },
-			diffOldFile               { fg = rose, gui = "italic" },
-			diffNewFile               { fg = leaf, gui = "italic" },
-			diffFile                  { fg = wood, gui = "bold" },
-			diffLine                  { fg = blossom, gui = "bold" },
-			diffIndexLine             { fg = wood },
+			sym"@markup.link"                  { Constant },
+			sym"@markup.link.label"            { Special },
+			sym"@markup.link.url"              { Constant },
 
-			gitcommitOverflow         { WarningMsg },
+    sym"@markup.raw"                   { Constant },
+    sym"@markup.raw.block"             { sym"@markup.raw" },
+
+		diffAdded                 { fg = leaf },
+		diffRemoved               { fg = rose },
+		diffChanged               { fg = water },
+		diffOldFile               { fg = rose, gui = "italic" },
+		diffNewFile               { fg = leaf, gui = "italic" },
+		diffFile                  { fg = wood, gui = "bold" },
+		diffLine                  { fg = blossom, gui = "bold" },
+		diffIndexLine             { fg = wood },
+
+		gitcommitOverflow         { WarningMsg },
 
 }
 end)
