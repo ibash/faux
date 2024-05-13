@@ -588,7 +588,8 @@ local theme = lush(function(injected_functions)
     sym "@markup.strikethrough"         { gui = "strikethrough" },
     sym "@markup.underline"             { Underlined },
 
-    sym "@markup.heading"               { Title },
+    -- sym "@markup.heading"               { Title },
+    sym "@markup.heading"               {  fg = p.blossom, gui = "bold" },
 
     sym "@markup.quote"                 { fg = p1.fg4 },
     sym "@markup.math"                  { Special },
@@ -601,7 +602,8 @@ local theme = lush(function(injected_functions)
     sym "@markup.raw"                   { Constant },
     sym "@markup.raw.block"             { sym "@markup.raw" },
 
-    sym "@markup.list"                  { Special },
+    -- sym "@markup.list"                  { Special },
+    sym "@markup.list"                  { fg = p.white },
     sym "@markup.list.checked"          { sym "@markup.list" },
     sym "@markup.list.unchecked"        { sym "@markup.list" },
 
@@ -615,7 +617,8 @@ local theme = lush(function(injected_functions)
 
     sym "@none"                         { },
 
-    sym "@punctuation.special.markdown" { Special },
+    -- sym "@punctuation.special.markdown" { Special },
+    sym "@punctuation.special.markdown" { fg = p.white },
     sym "@string.escape.markdown"       { SpecialKey },
     sym "@markup.link.markdown"         { Identifier, gui = "underline" },
     sym "@markup.italic.markdown"       { Italic },
@@ -670,6 +673,16 @@ local theme = lush(function(injected_functions)
     sym "@lsp.typemod.variable.defaultLibrary"    { sym "@variable.builtin" },
     sym "@lsp.typemod.variable.injected"          { sym "@variable" },
     sym "@lsp.typemod.variable.static"            { sym "@constant" },
+
+
+    -- sym "@markup.heading"             { fg = p.blossom, gui = "bold" },
+    -- sym "@markup.heading.1.markdown"  { sym "@markup.heading" },
+    -- sym "@markup.heading.2.markdown"  { sym "@markup.heading" },
+    -- sym "@markup.heading.3.markdown"  { sym "@markup.heading" },
+    -- sym "@markup.heading.4.markdown"  { sym "@markup.heading" },
+    -- sym "@markup.heading.5.markdown"  { sym "@markup.heading" },
+    -- sym "@markup.heading.6.markdown"  { sym "@markup.heading" },
+
 
     -- Syntax
     diffAdded                 { fg = p.leaf },
