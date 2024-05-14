@@ -50,7 +50,9 @@ local opt = {}
 
 local p = {
 	-- bg = hsluv("#1f1f28"),
-  bg = hsluv("#1C1C1C").da(35),
+  --bg = hsluv("#1C1C1C").da(35),
+  bg = hsluv("#1C1C1C").da(60).sa(1),
+
   --fg = hsluv("#dcd7ba").abs_sa(100),
   --fg = hsluv("#DADADA"),
   --fg = hsluv(0, 24, 87),
